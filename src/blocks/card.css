@@ -1,0 +1,108 @@
+.card__containers {
+  margin: auto;
+  width: 100%;
+  max-width: 282px;
+  height: auto;
+  box-sizing: border-box;
+  position: relative;
+  display: grid;
+  gap: 20px 17px;
+  
+}
+.card__container-image {
+  width: 100%;
+  max-width: 282px;
+  height: 282px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  cursor: pointer;
+}
+.card__container-img {
+  position: relative;
+  height: 282px;
+  overflow: hidden; 
+}
+.card__container-img:hover {
+  cursor: pointer;
+  opacity: 0.8;
+  transition: all 0.3s ease-in-out;
+  transform: scale(1.02);
+}
+
+.card__container-text {
+  display: grid;
+  grid-template-columns: 90% 10%;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 25px 15px 31px 21px;
+  background-color: #fff;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.card__container-title {
+  font-family: "Inter", Arial, sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  width: 100%;
+  max-width: 246px;
+  height: auto;
+  margin: 0;
+  line-height: 1.5;
+  color: #000;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.card__container-btn {
+  background-image: url(../images/like.jpg);
+  background-position: center;
+  width: 21px;
+  height: 19px;
+  border: none;
+  background-color: #fff;
+  padding: 0;
+  text-decoration: none;
+  margin: auto;
+}
+.card__container-btn:hover {
+  cursor: pointer;
+  opacity: 50%;
+}
+
+.card__delete-img {
+  position: absolute;
+  right: 15px;
+  top: 18px;
+  background-image: url(../images/delete.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 19px;
+  width: 18px;
+  background-color: #0e0b0b00;
+  border: none;
+}
+.card__delete-img:hover {
+  cursor: pointer;
+  opacity: 50%;
+}
+.card__btn-like {
+  background-image: url(../images/blackHeart.jpg);
+  background-position: center;
+  width: 21px;
+  height: 19px;
+}
+
+
+
+@media screen   and (min-width: 1280px) {
+  .card__containers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 50px;
+    max-width: 880px;
+  }
+}
+ 
+ 
