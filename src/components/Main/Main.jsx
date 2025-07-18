@@ -1,37 +1,64 @@
-import { useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Popup from "./Popup/Popup";
 import NewCard from "./Popup/NewCard/NewCard";
 import EditAvatar from "./Popup/EditAvatar/EditAvatar";
 import EditProfile from "./Popup/EditProfile/EditProfile";
 import Card from "./components/Card/Card";
 
-import profile from "../../images/profile.jpg";
 import pencil from "../../images/pencil.jpg";
 
-const cards = [
-  {
-    isLiked: false,
-    _id: "5d1f0611d321eb4bdcd707dd",
-    name: "Yosemite Valley",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
-    owner: "5d1f0611d321eb4bdcd707dd",
-    createdAt: "2019-07-05T08:10:57.741Z",
-  },
-  {
-    isLiked: false,
-    _id: "5d1f064ed321eb4bdcd707de",
-    name: "Lake Louise",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg",
-    owner: "5d1f0611d321eb4bdcd707dd",
-    createdAt: "2019-07-05T08:11:58.324Z",
-  },
-];
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+
+import { api } from "../../utils/api";
 
 const Main = () => {
-  const [popup, setPopup] = useState(null);
+  /* cards */
+  const [cards, setCards] = useState([]);
+  useEffect(() => {
+    api.getInitialCards()
+    .then((res) => {
+      setCards(res);
+    });
+  }, []);
 
+/* manejador de like */
+  async function handleCardLike(cardId) {
+    const card = cards.find((c) => c._id === cardId);
+
+    try {
+      let updateCard;
+      if (card.isLiked) {
+        updateCard = await api.deleteLikeCard(cardId);
+      } else {
+        updateCard = await api.putLikeCard(cardId);
+      }
+      setCards((prevCards) =>
+        prevCards.map((c) => (c._id === cardId ? updateCard : c))
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  /* manejador de eliminacion de cartas */
+  async function handleCardDelete(cardId) {
+    try{
+      await api.deleteCard(cardId);
+      setCards((prevCards) => 
+      prevCards.filter((card)=> card._id != cardId));
+    }catch(err){
+      console.error("Error al borrar la card:",err)
+    }
+    
+  }
+
+  
   const newCardPopup = { title: "Nuevo Lugar", children: <NewCard /> };
 
+  /* usuario */
+  const currentUser = useContext(CurrentUserContext);
+
+  /* informacion de usuaio */
   const editAvatarPopup = {
     title: "Cambiar foto de Perfil",
     children: <EditAvatar />,
@@ -41,6 +68,9 @@ const Main = () => {
     title: "Editar perfil",
     children: <EditProfile />,
   };
+
+  /* Popup */
+  const [popup, setPopup] = useState(null);
 
   function handleOpenPopup(popup) {
     setPopup(popup);
@@ -59,11 +89,15 @@ const Main = () => {
           <div className="profile__container">
             {/*   contenedor para la imagen de usuario */}
             <div className="profile__image-container">
-              <img
-                src={profile}
-                alt="imagen de perfil"
-                className="profile__image"
-              />
+              {currentUser.avatar ? (
+                <img
+                  src={currentUser.avatar}
+                  alt="imagen de perfil"
+                  className="profile__image"
+                />
+              ) : (
+                <div className="container"></div>
+              )}
 
               <button
                 className="profile__edit-button"
@@ -74,15 +108,20 @@ const Main = () => {
             </div>
 
             {/*   contenedor de perfil de usuario */}
+
             <div className="profile__text-container">
-              <p className="profile__name">Cousteau</p>
+              <p className="profile__name">
+                {currentUser.name || "cargando ...."}
+              </p>
 
               {/*   boton para abrir el formulario */}
               <button
                 className="profile__btn"
                 onClick={() => handleOpenPopup(editProfilePopup)}
               ></button>
-              <p className="profile__job">Explorador</p>
+              <p className="profile__job">
+                {currentUser.about || "cargando ...."}
+              </p>
             </div>
 
             {/*   boton para agregar */}
@@ -100,9 +139,11 @@ const Main = () => {
           <div className="card__containers">
             {cards.map((card) => (
               <Card
-                key={card._id}
-                card={card}
-                handleOpenPopup={handleOpenPopup}
+                key = {card._id}
+                card = {card}
+                handleOpenPopup = {handleOpenPopup}
+                handleCardLike = {handleCardLike}
+                handleCardDelete = {handleCardDelete}
               />
             ))}
           </div>
