@@ -18,6 +18,7 @@ const App = () => {
     setPopup(null);
   }
 
+  /* usuario */
   const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
@@ -41,9 +42,21 @@ const App = () => {
     }
   };
 
+  /* edit-avatar */
+
+  const handleUpdateAvatar = async (avatarUrl) => {
+    try {
+      const updateUser = await api.setUserAvatar({avatar : avatarUrl});
+      setCurrentUser(updateUser);
+      handleClosePopup();
+    }catch(err){
+      console.error("Error al actualizar avatar", err);
+    }
+  }
+
   return (
     <div className="page">
-      <CurrentUserContext.Provider value={{ currentUser, handleUpdateUser }}>
+      <CurrentUserContext.Provider value={{ currentUser, handleUpdateUser,handleUpdateAvatar }}>
         <Header />
         <Main
           handleOpenPopup={handleOpenPopup}

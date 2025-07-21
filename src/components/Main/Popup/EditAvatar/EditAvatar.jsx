@@ -1,7 +1,18 @@
-//ajustar los inputs segun el popup que se abra URL porque es la imagen del perfil
+import { useRef,useContext } from "react";
+import CurrentUserContext from "../../../../contexts/CurrentUserContext";
 const EditAvatar = () => {
+
+  const avatarRef = useRef();
+  const {handleUpdateAvatar} = useContext(CurrentUserContext);
+
+   const handleSubmit = (e) => {
+    e.preventDefault();
+    handleUpdateAvatar(avatarRef.current.value);
+  };
+
+
   return (
-    <form className="form__popup" noValidate>
+    <form className="form__popup" noValidate onSubmit={handleSubmit}>
       <fieldset className="form__date">
         <input
           type="url"
@@ -9,6 +20,8 @@ const EditAvatar = () => {
           id="nameInput"         
           className="form__input"
           placeholder="Ingresa la nueva Url para tu imagen"
+          required
+          ref={avatarRef}
          
         />
 

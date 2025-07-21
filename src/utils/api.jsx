@@ -116,7 +116,7 @@ class Api {
   }
 
   //metodo para cambiar foto de perfil
-  updateAvatar({ avatar }) {
+  setUserAvatar({ avatar }) {
     return fetch(`${this.url}/users/me/avatar`, {
       method: "PATCH",
       headers: this.headers,
