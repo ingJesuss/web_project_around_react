@@ -1,6 +1,5 @@
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 /* componentes */
-
 import NewCard from "./Popup/NewCard/NewCard";
 import EditAvatar from "./Popup/EditAvatar/EditAvatar";
 import EditProfile from "./Popup/EditProfile/EditProfile";
@@ -8,56 +7,16 @@ import Card from "./components/Card/Card";
 /* context */
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-
-import { api } from "../../utils/api";
 import pencil from "../../images/pencil.jpg";
 
-const Main = ({handleOpenPopup,handleClosePopup}) => {
-  /* cards */
-  const [cards, setCards] = useState([]);
-  useEffect(() => {
-    api.getInitialCards()
-    .then((res) => {
-      setCards(res);
-    });
-  }, []);
-
-/* manejador de like */
-  async function handleCardLike(cardId) {
-    const card = cards.find((c) => c._id === cardId);
-
-    try {
-      let updateCard;
-      if (card.isLiked) {
-        updateCard = await api.deleteLikeCard(cardId);
-      } else {
-        updateCard = await api.putLikeCard(cardId);
-      }
-      setCards((prevCards) =>
-        prevCards.map((c) => (c._id === cardId ? updateCard : c))
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  /* manejador de eliminacion de cartas */
-  async function handleCardDelete(cardId) {
-    try{
-      await api.deleteCard(cardId);
-      setCards((prevCards) => 
-      prevCards.filter((card)=> card._id != cardId));
-    }catch(err){
-      console.error("Error al borrar la card:",err)
-    }
-    
-  }
-
-  
-  const newCardPopup = { title: "Nuevo Lugar", children: <NewCard /> };
+const Main = ({ handleOpenPopup, cards, onCardLike, onCardDelete,onAddPlaceSubmit }) => {
+  const newCardPopup = {
+    title: "Nuevo Lugar",
+    children: <NewCard onAddPlaceSubmit={onAddPlaceSubmit} />,
+  };
 
   /* usuario */
-  const {currentUser} = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
 
   /* informacion de usuaio */
   const editAvatarPopup = {
@@ -69,7 +28,6 @@ const Main = ({handleOpenPopup,handleClosePopup}) => {
     title: "Editar perfil",
     children: <EditProfile />,
   };
-
 
   return (
     <>
@@ -130,17 +88,15 @@ const Main = ({handleOpenPopup,handleClosePopup}) => {
           <div className="card__containers">
             {cards.map((card) => (
               <Card
-                key = {card._id}
-                card = {card}
-                handleOpenPopup = {handleOpenPopup}
-                handleCardLike = {handleCardLike}
-                handleCardDelete = {handleCardDelete}
+                key={card._id}
+                card={card}
+                handleOpenPopup={handleOpenPopup}
+                handleCardLike={onCardLike}
+                handleCardDelete={onCardDelete}
               />
             ))}
           </div>
         </section>
-
-        
       </main>
     </>
   );

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "./components/Header/Header";
 import Popup from "./components/Main/Popup/Popup";
 import Main from "./components/Main/Main";
+
 import Footer from "./components/Footer/Footer";
 import CurrentUserContext from "./contexts/CurrentUserContext";
 import { api } from "./utils/api";
@@ -17,6 +18,59 @@ const App = () => {
   function handleClosePopup() {
     setPopup(null);
   }
+
+    /* cards */
+  const [cards, setCards] = useState([]);
+  useEffect(() => {
+    api.getInitialCards()
+    .then((res) => {
+      setCards(res);
+    });
+  }, []);
+
+/* manejador de like */
+  async function handleCardLike(cardId) {
+    const card = cards.find((c) => c._id === cardId);
+
+    try {
+      let updateCard;
+      if (card.isLiked) {
+        updateCard = await api.deleteLikeCard(cardId);
+      } else {
+        updateCard = await api.putLikeCard(cardId);
+      }
+      setCards((prevCards) =>
+        prevCards.map((c) => (c._id === cardId ? updateCard : c))
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  /* manejador de eliminacion de cartas */
+  async function handleCardDelete(cardId) {
+    try{
+      await api.deleteCard(cardId);
+      setCards((prevCards) => 
+      prevCards.filter((card)=> card._id != cardId));
+    }catch(err){
+      console.error("Error al borrar la card:",err)
+    }
+    
+  }
+
+  const handleAddPlaceSubmit = async (data) => {
+    try{
+      const newCard = await api.postNewCard(data);
+      setCards([newCard, ...cards]);
+      handleClosePopup();
+    }catch{
+      console.error("Error al cargar imagen", err)
+    }
+  }
+
+  
+  
 
   /* usuario */
   const [currentUser, setCurrentUser] = useState({});
@@ -61,6 +115,10 @@ const App = () => {
         <Main
           handleOpenPopup={handleOpenPopup}
           handleClosePopup={handleClosePopup}
+          cards={cards}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
+          onAddPlaceSubmit={handleAddPlaceSubmit}
         />
         <Footer />
         {popup && (

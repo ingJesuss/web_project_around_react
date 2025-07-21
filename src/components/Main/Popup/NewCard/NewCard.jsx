@@ -1,9 +1,17 @@
 
+import { useState } from "react";
+const NewCard = ({onAddPlaceSubmit}) => {
+   const [name, setName] = useState("");
+  const [link, setLink] = useState("");
 
-const NewCard = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onAddPlaceSubmit({ name, link });
+  };
+
   return (    
     
-         <form className="form__popup" noValidate>
+         <form className="form__popup" noValidate onSubmit={handleSubmit}>
           <fieldset className="form__date">
             <input
               type="text"
@@ -14,6 +22,8 @@ const NewCard = () => {
               maxLength={30}
               className="form__input"
               required
+              value={name}
+              onChange={e => setName(e.target.value)}
             />
             <span className="nameInput-error form__input-error"></span>
 
@@ -24,6 +34,8 @@ const NewCard = () => {
               placeholder="Url:https://tse3.mm.bing.net/th/id/OIP.-7M0KUhS8s1RLxTruVot-AHaHa?pid=Api&P=0&h=180"
               className="form__input"
               required
+              value={link}
+              onChange={e => setLink(e.target.value)}
             />
             <span className="jobInput-error form__input-error"></span>
           </fieldset>
