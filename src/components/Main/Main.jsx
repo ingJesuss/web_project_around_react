@@ -1,17 +1,18 @@
 import { useEffect, useState, useContext } from "react";
-import Popup from "./Popup/Popup";
+/* componentes */
+
 import NewCard from "./Popup/NewCard/NewCard";
 import EditAvatar from "./Popup/EditAvatar/EditAvatar";
 import EditProfile from "./Popup/EditProfile/EditProfile";
 import Card from "./components/Card/Card";
-
-import pencil from "../../images/pencil.jpg";
-
+/* context */
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-import { api } from "../../utils/api";
 
-const Main = () => {
+import { api } from "../../utils/api";
+import pencil from "../../images/pencil.jpg";
+
+const Main = ({handleOpenPopup,handleClosePopup}) => {
   /* cards */
   const [cards, setCards] = useState([]);
   useEffect(() => {
@@ -56,7 +57,7 @@ const Main = () => {
   const newCardPopup = { title: "Nuevo Lugar", children: <NewCard /> };
 
   /* usuario */
-  const currentUser = useContext(CurrentUserContext);
+  const {currentUser} = useContext(CurrentUserContext);
 
   /* informacion de usuaio */
   const editAvatarPopup = {
@@ -69,16 +70,6 @@ const Main = () => {
     children: <EditProfile />,
   };
 
-  /* Popup */
-  const [popup, setPopup] = useState(null);
-
-  function handleOpenPopup(popup) {
-    setPopup(popup);
-  }
-
-  function handleClosePopup() {
-    setPopup(null);
-  }
 
   return (
     <>
@@ -149,11 +140,7 @@ const Main = () => {
           </div>
         </section>
 
-        {popup && (
-          <Popup onClose={handleClosePopup} title={popup.title}>
-            {popup.children}
-          </Popup>
-        )}
+        
       </main>
     </>
   );

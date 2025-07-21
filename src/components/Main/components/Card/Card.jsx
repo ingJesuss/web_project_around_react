@@ -1,7 +1,9 @@
 import ImagePopup from "../../Popup/ImagePopup/ImagePopup";
 
+
 const Card = ({ card, handleOpenPopup, handleCardLike,handleCardDelete }) => {
   const { name, link, isLiked, _id } = card;
+  
 
   const imageComponent = {
     children: <ImagePopup card={card} />,
