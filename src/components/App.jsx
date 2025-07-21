@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import Header from "./components/Header/Header";
-import Popup from "./components/Main/Popup/Popup";
-import Main from "./components/Main/Main";
+import Header from "./Header/Header";
+import Popup from "./Main/Popup/Popup";
+import Main from "./Main/Main";
 
-import Footer from "./components/Footer/Footer";
-import CurrentUserContext from "./contexts/CurrentUserContext";
-import { api } from "./utils/api";
+import Footer from "./Footer/Footer";
+import CurrentUserContext from "../contexts/CurrentUserContext";
+import { api } from "../utils/api";
 
 const App = () => {
   /* Popup */
