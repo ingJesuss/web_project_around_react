@@ -122,11 +122,7 @@ const App = () => {
           onAddPlaceSubmit={handleAddPlaceSubmit}
         />
         <Footer />
-        {popup && (
-          <Popup onClose={handleClosePopup} title={popup.title}>
-            {popup.children}
-          </Popup>
-        )}
+        
       </CurrentUserContext.Provider>
     </div>
   );

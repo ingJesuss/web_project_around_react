@@ -2,6 +2,7 @@ import { useContext } from "react";
 /* componentes */
 import NewCard from "./Popup/NewCard/NewCard";
 import EditAvatar from "./Popup/EditAvatar/EditAvatar";
+import Popup from "./Popup/Popup";
 import EditProfile from "./Popup/EditProfile/EditProfile";
 import Card from "./components/Card/Card";
 /* context */
@@ -9,7 +10,7 @@ import CurrentUserContext from "../../contexts/CurrentUserContext";
 
 import pencil from "../../images/pencil.jpg";
 
-const Main = ({ handleOpenPopup, cards, onCardLike, onCardDelete,onAddPlaceSubmit }) => {
+const Main = ({ handleOpenPopup,handleClosePopup,popup, cards, onCardLike, onCardDelete,onAddPlaceSubmit }) => {
   const newCardPopup = {
     title: "Nuevo Lugar",
     children: <NewCard onAddPlaceSubmit={onAddPlaceSubmit} />,
@@ -29,7 +30,7 @@ const Main = ({ handleOpenPopup, cards, onCardLike, onCardDelete,onAddPlaceSubmi
     children: <EditProfile />,
   };
 
-  return (
+    return (
     <>
       {/*   Comienzo de contenido */}
       <main className="content">
@@ -97,6 +98,12 @@ const Main = ({ handleOpenPopup, cards, onCardLike, onCardDelete,onAddPlaceSubmi
             ))}
           </div>
         </section>
+
+        {popup && (
+          <Popup onClose={handleClosePopup} title={popup.title}>
+            {popup.children}
+          </Popup>
+        )}
       </main>
     </>
   );
