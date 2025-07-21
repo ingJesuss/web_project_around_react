@@ -116,6 +116,7 @@ const App = () => {
           handleOpenPopup={handleOpenPopup}
           handleClosePopup={handleClosePopup}
           cards={cards}
+          popup={popup}
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
           onAddPlaceSubmit={handleAddPlaceSubmit}
